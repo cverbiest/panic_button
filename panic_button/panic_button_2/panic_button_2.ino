@@ -38,24 +38,26 @@ void feedback(char txt[]) {
 }
 
 void LockPC() {
-   // Press GUI-D
+    feedback("Locking PC");
+    
+    // Press GUI-D
     Keyboard.set_modifier(MODIFIERKEY_GUI);
     Keyboard.send_now();
     Keyboard.set_key1(KEY_D);
     Keyboard.send_now();
-
     // release all the keys at the same instant
     Keyboard.set_modifier(0);
     Keyboard.set_key1(0);
     Keyboard.send_now();  
+
     feedback("GUI-D sent, pause");
     delay(100);
 
+    // Press GUI-L
     Keyboard.set_modifier(MODIFIERKEY_GUI);
     Keyboard.send_now();
     Keyboard.set_key1(KEY_L);
     Keyboard.send_now();
-
     // release all the keys at the same instant
     Keyboard.set_modifier(0);
     Keyboard.set_key1(0);
@@ -74,7 +76,6 @@ void loop()
 {
   char info[100];
 
-
   if (digitalRead(buttonPin) == HIGH) {
     beenUp = 1;
     downCount = 0;
@@ -83,7 +84,7 @@ void loop()
     downCount++;
     if (beenUp) {
       beenUp = 0;
-      Serial.println("Button pressed!!!");
+      feedback("Button pressed!!!");
       warnLevel += 500;
       if (warnLevel > 500) {
         LockPC();
