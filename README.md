@@ -13,8 +13,8 @@ See Fritzing design in docs folder
 * RGB led
 * Red arcade button
 * small breadboard
-* 5 wires
-* 4 220 Ohm resistors
+* 3 wires
+* 3 220 Ohm resistors
 * (cardboard) box
 
 ## Software
