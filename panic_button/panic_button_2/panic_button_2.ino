@@ -34,7 +34,7 @@ void SetLedRGB(int red, int green, int blue) {
 }
 
 void feedback(char txt[]) {
-  if (SerialOn) { if (!strcmp(lastinfo,txt)) Serial.println(txt); strcpy(txt, lastinfo); }
+  if (SerialOn) { if (strcmp(lastinfo,txt)) Serial.println(txt); strcpy(lastinfo, txt); }
 }
 
 void LockPC() {
