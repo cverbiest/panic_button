@@ -5,6 +5,8 @@ Just playing around
 ## Hardware
 See Fritzing design in docs folder
 
+![ScreenShot](docs/panic_button_bb.png)
+
 ### part list
 * Teensy 2.0
 * USB cable to connect Teensy to PC
