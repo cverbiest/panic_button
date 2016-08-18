@@ -1,21 +1,29 @@
+#include <Bounce.h>
+
 /*
 Author : Carl Verbiest
 Created : Jul 9, 2012
 Purpose : Teensy 2.0 code for a windows lockdown button
 */
 
-int redPin =  15;
-int greenPin =  14;
-int bluePin =  12;
-int internalLED = 11;
-int buttonPin = 7;
-int button2Pin = 6;
+const int redPin =  15;
+const int greenPin =  14;
+const int bluePin =  12;
+const int internalLED = 11;
+const int buttonPin = 7;
+const int button2Pin = 6;
+const int MaxBufferSize = 512;
+
+Bounce pushbutton = Bounce(button2Pin, 10);  // 10 ms debounce
 
 int warnLevel = 0;
 int beenUp = 0;
 int SerialOn = 0;
 int downCount = 0;
+int BufferSize = 0;
 char lastinfo[100];
+char SerialBuffer[512];
+
 
 // The setup() method runs once, when the sketch starts
 
@@ -88,6 +96,34 @@ void loop()
 {
   char info[100];
 
+  // Process serial input 
+  unsigned char bytecount = 0;
+  unsigned char incomingByte = 0;
+  while (Serial.available() && bytecount < 64) {
+    incomingByte = Serial.read();
+    if (incomingByte == 13) {
+      SerialBuffer[BufferSize++] = 0;
+      sprintf(info, "Received:%s", SerialBuffer);
+      feedback(info);
+      BufferSize = 0;
+    } else {
+      SerialBuffer[BufferSize++] = incomingByte;
+      if (incomingByte < 33 or incomingByte > 127) {
+        sprintf(info, "Detected chr(%i), %i in buffer", incomingByte, BufferSize);
+        feedback(info);
+      }
+      
+    }
+    bytecount++;
+  }
+
+  if (pushbutton.update()) {
+    if (pushbutton.fallingEdge()) {
+    }
+    feedback("pushbutton.fallingEdge");
+    Keyboard.print(SerialBuffer);
+  }
+/*  
   // Pin HIGH = button not pressed
   if (digitalRead(button2Pin) == HIGH) {
     digitalWrite(internalLED, LOW);
@@ -95,8 +131,10 @@ void loop()
   } else {
     digitalWrite(internalLED, HIGH);
     feedback("Button II pressed");
+    Keyboard.print(SerialBuffer);
   }
-  
+*/
+
   if (digitalRead(buttonPin) == HIGH) {
     beenUp = 1;
     downCount = 0;
