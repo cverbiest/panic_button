@@ -105,10 +105,17 @@ void GetKeyScanCode()
   char translated_char[3];
   uint8_t scancode = keyboard.get_raw_scan_code(translated_char);
   if (scancode) {
-    uint8_t row = scancode / 8 + 1;
-    uint8_t pos = scancode % 8 + 1;
-    sprintf(info, "scan code %i, row %i pos %i, %c %c %c", scancode, row, pos, translated_char[0], translated_char[1], translated_char[2] );
-    Serial.println(info);
+    switch (scancode) {
+      case 21:
+        Mouse.click();
+        Serial.print(".");
+        break;
+      default:  
+        uint8_t row = scancode / 8 + 1;
+        uint8_t pos = scancode % 8 + 1;
+        sprintf(info, "scan code %i, row %i pos %i, %c %c %c", scancode, row, pos, translated_char[0], translated_char[1], translated_char[2] );
+        Serial.println(info);
+    }
 
   }
 }
